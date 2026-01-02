@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Post Logger</title>
+</head>
+<body>
+  <h2>投稿</h2>
+
+  <textarea id="content" rows="5" cols="40" placeholder="今の思考"></textarea><br><br>
+  <input id="tags" placeholder="#タグ 複数OK"><br><br>
+  <button onclick="sendPost()">送信</button>
+
+  <script>
+    const SUPABASE_URL = "https://nipsjjpslzxpifzephyl.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_xgQ3OMxMhXaieZkDRupKbw_Z7OvdtQ7";
+
+    async function sendPost() {
+      const content = document.getElementById("content").value;
+      const tags = document.getElementById("tags").value;
+
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/posts`, {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({
+          content: content,
+          tags: tags
+        })
+      });
+
+      if (res.ok) {
+        alert("投稿完了");
+        document.getElementById("content").value = "";
+        document.getElementById("tags").value = "";
+      } else {
+        alert("エラー");
+      }
+    }
+  </script>
+</body>
+</html>
